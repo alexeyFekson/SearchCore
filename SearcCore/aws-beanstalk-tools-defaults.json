@@ -1,0 +1,20 @@
+
+{
+    "region" : "us-west-2",
+    "configuration" : "Release",
+    "framework"     : "netcoreapp3.1",
+    "self-contained" : true,
+    "application"    : "SearchCore-sc",
+    "environment"    : "SearchCore-sc-dev",
+    "enable-xray"    : false,
+    "enhanced-health-type" : "basic",
+    "additional-options"   : "\"aws:autoscaling:launchconfiguration,SecurityGroups\"=\"sg-1d194843\";\"aws:ec2:vpc,Subnets\"=\"subnet-dc1a0197\"",
+    "solution-stack"       : "64bit Amazon Linux 2 v2.0.3 running .NET Core",
+    "environment-type"     : "SingleInstance",
+    "cname"                : "searchcore-sc-dev",
+    "instance-type"        : "t1.micro",
+    "key-pair"             : "",
+    "instance-profile"     : "aws-elasticbeanstalk-ec2-role",
+    "service-role"         : "aws-elasticbeanstalk-service-role",
+    "proxy-server"         : "nginx"
+}

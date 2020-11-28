@@ -8,16 +8,21 @@ using SearcCore.Utils;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace SearcCore.Selenuim
 {
-    public class SeleniumSeracher :IDisposable
+    public class SeleniumSeracher : IDisposable
     {
+       // private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         IWebDriver driver;
         private readonly string URL = "https://flatfy.lun.ua/%D0%B0%D1%80%D0%B5%D0%BD%D0%B4%D0%B0-%D0%BA%D0%B2%D0%B0%D1%80%D1%82%D0%B8%D1%80-%D0%BA%D0%B8%D0%B5%D0%B2";
+       // private readonly string URL = "https://flatfy.lun.ua/%D0%BF%D1%80%D0%BE%D0%B4%D0%B0%D0%B6%D0%B0-%D0%BA%D0%B2%D0%B0%D1%80%D1%82%D0%B8%D1%80-%D0%BA%D0%B8%D0%B5%D0%B2"
         private readonly string flatfySearchBoxIs = "geo-control-input";
         private readonly string aptItemArticalPath = "//article[@class=\"jss160\"]";
         private readonly string aptDataPrice = "//div[@class=\"jss191\"]";
@@ -26,41 +31,87 @@ namespace SearcCore.Selenuim
         private readonly string aptAdres = "//div[@class=\"jss180\"]";
         private readonly string aptDetailSection = "//ul[@class=\"jss194\"]"; ////article[@class="jss160"][2]//ul[@class="jss194"]
         private readonly string aptDetailSectionSize = "[1]//li[2]";
+        private readonly string aptDetailSectionFloor = "[1]//li[3]";
+        private readonly string aptMore = "//button//span[@class =\"jss61\"]";
         //size //article[@class="jss160"][2]//ul[@class="jss194"]/li[2]
 
-        public SeleniumSeracher() {
-            driver = new ChromeDriver(@"C:\");
+        public SeleniumSeracher()
+        {
+         //   var chromeOptions = new ChromeOptions();
+        //    chromeOptions.AddArguments("headless");
 
-            AfetInitAsync();
+            driver  = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+
+            Task.Run(AfetInitAsync);
         }
 
         public async Task AfetInitAsync()
         {
-         await   Converter.GetExchangeRate("USD", "UAH") ;
-          
+            await Converter.GetExchangeRate("USD", "UAH"); //String strUrl = driver.getCurrentUrl();
+
         }
 
 
-        public IEnumerable<AppartmentModel> SearchForAppartmentsByText(string searchParam )
+        public IEnumerable<AppartmentModel> SearchForAppartmentsByText(string searchParam)
         {
+
             OpenChromeEnterTextAndSearch(searchParam);
-            IEnumerable< IWebElement> listOfAptsWebElement =  FindAllAppartmentItems();
-            List<AppartmentModel> aptList = new List<AppartmentModel>();
-            for (int i= 1; i<listOfAptsWebElement.Count();i++)
+
+            IList<AppartmentModel> allPgesApt = SearchForAppartmentByTextBulk();
+            string baseUrl = driver.Url;
+            for (int i = 2; i < 10; i++)
             {
                 try
                 {
-                    aptList.Add(convertFromWEbDriverTOAppartment(i));
+                    driver.Navigate().GoToUrl(baseUrl + "?page="+i);
+                    var pageApts=   SearchForAppartmentByTextBulk();
+                    if (pageApts.Count == 0) return allPgesApt;
+                    foreach(var apt in pageApts)
+                    {
+                        allPgesApt.Add(apt);
+                    }
+
                 }
-                catch(Exception e)
+                catch(Exception)
+                {
+                    return allPgesApt;
+                  //  break;
+                }
+            }
+
+
+
+            return allPgesApt;
+        }
+
+
+        private IList<AppartmentModel> SearchForAppartmentByTextBulk()
+        {
+            IEnumerable<IWebElement> listOfAptsWebElement = FindAllAppartmentItems();
+            List<AppartmentModel> aptList = new List<AppartmentModel>();
+            for (int i = 1; i <= listOfAptsWebElement.Count(); i++)
+            {
+                try
+                {
+                    AppartmentModel apt = convertFromWEbDriverTOAppartment(i);
+                    if (IsValid(apt))
+                    {
+                        aptList.Add(apt);
+                    }
+                }
+                catch (Exception e)
                 {
                     Console.WriteLine(e);
                 }
-             
+
             }
             return aptList;
         }
 
+        private bool IsValid(AppartmentModel apt)
+        {
+            return apt.PriceUsd > 10;
+        }
 
         private AppartmentModel convertFromWEbDriverTOAppartment(int idx)
         {
@@ -73,7 +124,16 @@ namespace SearcCore.Selenuim
 
             string rawSize = getValueByXpath(aptItemArticalPath + "[" + idx + "]" + aptDetailSection + aptDetailSectionSize);
 
-            return new AppartmentModel(priceRaw) { rawDate = rawDate,rawAdress = rawAdress.Replace("\r\n", " "), rawSize = rawSize };
+            string rawFloor = getValueByXpath(aptItemArticalPath + "[" + idx + "]" + aptDetailSection + aptDetailSectionFloor,false);
+
+            string rawMore = getValueByXpath(aptItemArticalPath + "[" + idx + "]" + aptMore,false);
+            return new AppartmentModel(priceRaw) {
+                rawDate = rawDate,
+                rawAdress = rawAdress.Replace("\r\n", " "), 
+                rawSize = rawSize, 
+                rawFloor = rawFloor,
+                rawMore=rawMore 
+            };
         }
 
 
@@ -83,16 +143,22 @@ namespace SearcCore.Selenuim
             return element.Text;
         }
 
-        private string getValueByXpath(string path)
+        private string getValueByXpath(string path,bool must = true)
         {
             string res = "";
             try
             {
-             res = getValue(driver.FindElement(By.XPath(path)));
+                res = getValue(driver.FindElement(By.XPath(path)));
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                Console.WriteLine(e);
+                if (must)
+                {
+                    Console.WriteLine(string.Format("[ALEXEY] - error - not found element {0}, proccess continue",path ));
+                } else
+                {
+                   // Console.WriteLine(string.Format($"[ALEXEY] - debug - not found element {0}, proccess continue [this is not an error!]", path));
+                }
             }
             return res;
         }
@@ -118,7 +184,8 @@ namespace SearcCore.Selenuim
 
         public void Dispose()
         {
-            driver.Dispose();
+          driver.Close();
+            driver.Quit();
         }
     }
 }

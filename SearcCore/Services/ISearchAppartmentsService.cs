@@ -8,6 +8,8 @@ namespace SearcCore.Services
 {
     public interface ISearchAppartmentsService
     {
-       public IEnumerable<AppartmentModel> SearchByText(string text);
+        public IEnumerable<AppartmentModel> SearchByText(string text);
+
+        public void SearchByListParams();
     }
 }
