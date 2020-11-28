@@ -19,7 +19,7 @@ namespace SearcCore.Services
                     var lines = streamReader.ReadToEnd().Split("\r\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
                     foreach (var line in lines)
                     {
-                        sParams.Add(line);
+                        sParams.Add(line); 
                     }
                 }
                 catch(Exception e)
