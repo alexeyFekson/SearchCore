@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SearchCore", "SearchCore\SearchCore.csproj", "{784EC75C-BC55-4AFB-9485-8C8E59B0C2EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{6EF78A0D-D1C6-467D-9FC7-26409715572E}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{784EC75C-BC55-4AFB-9485-8C8E59B0C2EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{784EC75C-BC55-4AFB-9485-8C8E59B0C2EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{784EC75C-BC55-4AFB-9485-8C8E59B0C2EC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6EF78A0D-D1C6-467D-9FC7-26409715572E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6EF78A0D-D1C6-467D-9FC7-26409715572E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6EF78A0D-D1C6-467D-9FC7-26409715572E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6EF78A0D-D1C6-467D-9FC7-26409715572E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
