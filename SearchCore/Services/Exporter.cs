@@ -8,6 +8,8 @@ namespace SearcCore.Services
 {
     public class Exporter : IExporter
     {
+
+
         public string ExportToFile(IEnumerable<AppartmentModel> items, string filePath, string param, bool byKey)
         {
             string folder = filePath;
