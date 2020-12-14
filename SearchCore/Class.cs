@@ -10,7 +10,7 @@ namespace SearchCore
         private int[] _values;
         private int idx = 0;
         private int size;
-        public int[] Values { get => _values; set { _values = value} }
+        public int[] Values { get => _values; set { _values = value; } }
 
 
         public MinHeap(int size)
