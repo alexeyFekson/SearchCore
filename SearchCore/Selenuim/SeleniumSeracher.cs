@@ -56,7 +56,7 @@ namespace SearcCore.Selenuim
         {
 
             OpenChromeEnterTextAndSearch(searchParam);
-
+            System.Threading.Thread.Sleep(12000);
             IList<AppartmentModel> allPgesApt = SearchForAppartmentByTextBulk();
             string baseUrl = driver.Url;
             for (int i = 2; i < 10; i++)
@@ -65,6 +65,7 @@ namespace SearcCore.Selenuim
                 {
                     driver.Navigate().GoToUrl(baseUrl + "?page="+i);
                     var pageApts=   SearchForAppartmentByTextBulk();
+                    System.Threading.Thread.Sleep(12000);
                     if (pageApts.Count == 0) return allPgesApt;
                     foreach(var apt in pageApts)
                     {
@@ -173,9 +174,10 @@ namespace SearcCore.Selenuim
         private void OpenChromeEnterTextAndSearch(string text)
         {
             driver.Navigate().GoToUrl(URL);
+            System.Threading.Thread.Sleep(30000);
             IWebElement searchBox = driver.FindElement(By.Id(flatfySearchBoxIs));
             searchBox.SendKeys(text);
-            System.Threading.Thread.Sleep(2000);
+            System.Threading.Thread.Sleep(10000);
             IWebElement searchBtn = driver.FindElement(By.XPath(searchBtnString));
             searchBtn.Click();
             System.Threading.Thread.Sleep(3000);
@@ -184,8 +186,9 @@ namespace SearcCore.Selenuim
 
         public void Dispose()
         {
+            
           driver.Close();
-            driver.Quit();
+          driver.Quit();
         }
     }
 }
