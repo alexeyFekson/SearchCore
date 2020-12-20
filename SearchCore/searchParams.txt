@@ -1,1 +1,3 @@
-﻿ЖК SVITLO PARK#gauda
+﻿Варшавский Микрорайон               # warsaw_micro  # Good to analyze. 31 results.
+Місто Квітів. Парковий квартал      # misto_kvitiv  # Good to analyze. 20 results.
+ЖК Новая Англия                     # new_england   # Good to analyze. 30 results.

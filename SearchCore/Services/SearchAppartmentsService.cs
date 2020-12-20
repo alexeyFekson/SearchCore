@@ -39,8 +39,10 @@ namespace SearcCore.Services
 
             foreach (string sp in spList)
             {
-                Thread t = new Thread(() => SearchByText(sp));
-                t.Start();
+
+                //Thread t = new Thread(() => SearchByText(sp));
+                // t.Start();
+                SearchByText(sp);
             }
         }
     }
