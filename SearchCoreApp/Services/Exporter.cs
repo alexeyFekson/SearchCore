@@ -22,13 +22,35 @@ namespace SearchCoreApp.Services
             Directory.CreateDirectory(folder);
             string fileName = DateTime.Now.Date.ToString("dd'-'MM'-'yyyy");
             string fullPath = folder + "\\" + fileName + ".txt";
-            using (StreamWriter outputFile = new StreamWriter(fullPath))
+            if (!FileExistsAndEmptyArray(fullPath))
             {
-                var line = JsonConvert.SerializeObject(items);
-                outputFile.WriteLine(line);
+                using (StreamWriter outputFile = new StreamWriter(fullPath))
+                {
+                    var line = JsonConvert.SerializeObject(items);
+                    outputFile.WriteLine(line);
+                }
             }
+         
             return fileName;
         }
+
+
+        private bool FileExistsAndEmptyArray(string path)
+        {
+            if (!File.Exists(path))
+            {
+                return false;
+            }
+            string[] lines = File.ReadAllLines(path);
+            if(lines.Length==1 && lines[0].Equals("[]"))
+            {
+                return true;
+            }
+            return false;
+
+
+        }
+
 
         public void sendToMail(string from, string to)
         {

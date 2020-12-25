@@ -23,13 +23,13 @@ namespace SearchCoreApp.Services
             SeleniumSeracher ss = new SeleniumSeracher();
             string[] KeyValue = searchParam.Split("#");
             Console.WriteLine(string.Format("[ALEXEY] - info - working on item key - {0}, value -{1}", KeyValue[0], KeyValue[1]));
-            var apprtmentsFount = ss.SearchForAppartmentsByText(KeyValue[0]);
+            var apprtmentsFound = ss.SearchForAppartmentsByText(KeyValue[0]);
 
-            string pathByKey = _exporter.ExportToFile(apprtmentsFount, @"D:\LunAptReport\", KeyValue[0], true);
-            string pathByvalue = _exporter.ExportToFile(apprtmentsFount, @"D:\LunAptReport\", KeyValue[1], false);
+            string pathByKey = _exporter.ExportToFile(apprtmentsFound, @"D:\LunAptReport\", KeyValue[0], true);
+            string pathByvalue = _exporter.ExportToFile(apprtmentsFound, @"D:\LunAptReport\", KeyValue[1], false);
 
             Console.WriteLine(string.Format(string.Format("[ALEXEY] -info- Search for {0} has ended, output file: By key:{1}, By Value: {2} ", searchParam, pathByKey, pathByvalue)));
-            return apprtmentsFount;
+            return apprtmentsFound;
         }
 
         public void SearchByListParams()
