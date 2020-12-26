@@ -22,7 +22,7 @@ namespace SearchCoreApp.Services
             Directory.CreateDirectory(folder);
             string fileName = DateTime.Now.Date.ToString("dd'-'MM'-'yyyy");
             string fullPath = folder + "\\" + fileName + ".txt";
-            if (!FileExistsAndEmptyArray(fullPath))
+            if (ShouldReplaceFile(fullPath))
             {
                 using (StreamWriter outputFile = new StreamWriter(fullPath))
                 {
@@ -47,7 +47,20 @@ namespace SearchCoreApp.Services
                 return true;
             }
             return false;
+        }
 
+        private bool ShouldReplaceFile(string path)
+        {
+            if (!File.Exists(path))
+            {
+                return true;
+            }
+            string[] lines = File.ReadAllLines(path);
+            if (lines.Length == 1 && lines[0].Equals("[]"))
+            {
+                return true;
+            }
+            return false;
 
         }
 
