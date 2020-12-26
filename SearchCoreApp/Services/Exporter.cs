@@ -39,7 +39,7 @@ namespace SearchCoreApp.Services
         {
             if (!File.Exists(path))
             {
-                return false;
+                return true;
             }
             string[] lines = File.ReadAllLines(path);
             if(lines.Length==1 && lines[0].Equals("[]"))
