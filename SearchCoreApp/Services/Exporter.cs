@@ -35,19 +35,6 @@ namespace SearchCoreApp.Services
         }
 
 
-        private bool FileExistsAndEmptyArray(string path)
-        {
-            if (!File.Exists(path))
-            {
-                return true;
-            }
-            string[] lines = File.ReadAllLines(path);
-            if(lines.Length==1 && lines[0].Equals("[]"))
-            {
-                return true;
-            }
-            return false;
-        }
 
         private bool ShouldReplaceFile(string path)
         {

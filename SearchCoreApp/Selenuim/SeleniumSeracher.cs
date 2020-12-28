@@ -19,7 +19,7 @@ namespace SearchCoreApp.Selenuim
     public class SeleniumSeracher : IDisposable
     {
        // private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-
+     //  input-base__input
         IWebDriver driver;
         private readonly string URL = "https://flatfy.lun.ua/%D0%B0%D1%80%D0%B5%D0%BD%D0%B4%D0%B0-%D0%BA%D0%B2%D0%B0%D1%80%D1%82%D0%B8%D1%80-%D0%BA%D0%B8%D0%B5%D0%B2";
        // private readonly string URL = "https://flatfy.lun.ua/%D0%BF%D1%80%D0%BE%D0%B4%D0%B0%D0%B6%D0%B0-%D0%BA%D0%B2%D0%B0%D1%80%D1%82%D0%B8%D1%80-%D0%BA%D0%B8%D0%B5%D0%B2"
@@ -37,10 +37,11 @@ namespace SearchCoreApp.Selenuim
 
         public SeleniumSeracher()
         {
-         //   var chromeOptions = new ChromeOptions();
-        //    chromeOptions.AddArguments("headless");
-
-            driver  = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+            //   var chromeOptions = new ChromeOptions();
+            //    chromeOptions.AddArguments("headless");
+            ChromeOptions options = new ChromeOptions();
+            options.BinaryLocation = "D:\\Chrome\\Application";
+            driver  = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),options);
 
             Task.Run(AfetInitAsync);
         }
